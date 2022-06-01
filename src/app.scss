@@ -1,6 +1,11 @@
 // 全局样式
 @import './assets/style/index.scss';
 
+* {
+  margin: 0;
+  padding: 0;
+}
+
 .app {
   font-size: 20px;
 }
