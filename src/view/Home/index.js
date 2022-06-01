@@ -1,8 +1,9 @@
 import SvgIcon from 'components/SvgIcon'
 import React from 'react'
+import { Outlet } from 'react-router-dom'
 import { Top } from './Top'
 
-export default function Home() {
+export default function Home(props) {
   return (
     <div>
       <Top>
@@ -14,6 +15,7 @@ export default function Home() {
           <SvgIcon icon="search"></SvgIcon>
         </span>
       </Top>
+      <Outlet></Outlet>
     </div>
   )
 }

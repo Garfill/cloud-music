@@ -8,6 +8,12 @@ const routes = [
   {
     path: '/',
     component: wrap('Home'),
+    children: [
+      {
+        path: 'test',
+        component: wrap('Test'),
+      }
+    ]
   },
   {
     path: '/singer',

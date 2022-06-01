@@ -17,6 +17,11 @@ function App() {
                   <route.component />
                 </Suspense>
               }>
+              {
+                route.children && route.children.map((child) => (
+                  <Route key={child.path} path={child.path} element={<child.component />}></Route>
+                ))
+              }
             </Route>
           ))
         }
