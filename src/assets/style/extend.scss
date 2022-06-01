@@ -28,3 +28,18 @@
 .three-line {
   @include multi-line-hidden(3)
 }
+
+// 浮动
+.float-l {
+  float: left;
+}
+.float-r {
+  float: right;
+}
+.clearfix {
+  &::before, &::after {
+    content: '';
+    clear: both;
+    display: block;
+  }
+}

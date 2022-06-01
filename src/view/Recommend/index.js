@@ -1,4 +1,5 @@
 import Swiper from 'components/Swiper'
+import SwiperItem from 'components/Swiper/Item'
 import React from 'react'
 
 export default function Recommend() {
@@ -10,7 +11,15 @@ export default function Recommend() {
   ]
   return (
     <>
-      <Swiper banner={bannerList}></Swiper>
+      <Swiper>
+        {
+          bannerList.map((item, index) => (
+            <SwiperItem key={index}>
+              <img src={item} alt=''></img>
+            </SwiperItem>
+          ))
+        }
+      </Swiper>
     </>
   )
 }

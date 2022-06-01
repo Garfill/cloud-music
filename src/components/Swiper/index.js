@@ -1,59 +1,39 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { setStyle } from 'utils'
-import SwiperInner from './Inner'
-import './style.scss'
-
-let timer = null
+import './swiper.scss'
 
 export default function Swiper(props) {
-  const { banner, duration = 5000 } = props
+  const { duration = 5000, children, activeClass = 'active', activeDotClass = 'active' } = props
 
   const [active, setActive] = useState(0)
-  const swiperRef = useRef(null)
-
-  function changeItemTransition() {
-    let el = swiperRef.current;
-    el.style.transition = 'opacity 1.5s ease-out'
-    setStyle(el, 'opacity', 0)
-
-    setTimeout(() => {
-      el.style.transition = 'none 0s ease'
-      setStyle(el, 'opacity', 1)
-    }, 1500);
-  }
+  const [timer, setTimer] = useState(null)
 
   function run(index) {
-    changeItemTransition()
-
-    let nextIndex = (index + 1) % banner.length
-    setTimeout(() => {
-      setActive(nextIndex)
-    }, 700);
+    let timerId = setTimeout(() => {
+      setActive((index + 1) % children.length)
+    }, duration);
+    setTimer(timerId)
   }
 
   useEffect(() => {
-    timer = setTimeout(() => {
-      run(active)
-    }, duration);
-
-    return () => {
-      clearTimeout(timer)
-    }
+    run(active)
+    return () => { clearTimeout(timer) }
   }, [active])
-
-  
 
   return (
     <div className='swiper-container'>
-      <div ref={swiperRef} className='swiper-item-container'>
-        <SwiperInner
-          url={banner[active]}
-        ></SwiperInner>
+      <div className='swiper-banner-container'>
+        {
+          children.map((child, index) => (
+            <div className={`swiper-item-container ${active === index ? activeClass : ''}`} key={index}>
+              {child}
+            </div>
+          ))
+        }
       </div>
       <div className='swiper-indicator-container'>
         {
-          banner.map((item, index) => {
-            return <div key={index} className={`swiper-indicator-item ${index == active ? 'active' : ''}`}></div>
+          children.map((item, index) => {
+            return <div key={index} className={`swiper-indicator-item ${index == active ? activeDotClass : ''}`}></div>
           })
         }
       </div>
