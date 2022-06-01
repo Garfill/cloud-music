@@ -12,3 +12,8 @@ export function loadScript(url, defer = false, callback = noop) {
   script.defer = defer
   document.body.appendChild(script)
 }
+
+
+export function setStyle(el, property, value) {
+  el.style[property] = value
+}
