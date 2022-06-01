@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
-import './style.scss';
+import './app.scss';
 
 // iconfont
 import 'icon'

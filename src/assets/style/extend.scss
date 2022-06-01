@@ -1,0 +1,30 @@
+@import './mixin.scss';
+
+// 扩大可点击区域
+.extend-click {
+  position: relative;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: -10px;
+    bottom: -10px;
+    left: -10px;
+    right: -10px;
+  }
+}
+
+// 文本隐藏
+.single-line {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.two-line {
+  @include multi-line-hidden(2);
+}
+
+.three-line {
+  @include multi-line-hidden(3)
+}

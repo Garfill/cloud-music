@@ -1,2 +1,2 @@
 import { loadScript } from 'utils'
-loadScript('http://at.alicdn.com/t/font_3438910_9yonglrbt7p.js')
+loadScript('//at.alicdn.com/t/font_3438910_dtwbkpjwqlb.js')
