@@ -4,7 +4,7 @@
 ## 所用技术栈
 - react v18
 - react-router@6
-- recoil
+- redux(redux-toolkit)
 - axios
 - better-scroll
 

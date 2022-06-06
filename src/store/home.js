@@ -1,11 +1,22 @@
-import { atom } from "recoil";
+import { createSlice } from "@reduxjs/toolkit";
 
-export const bannerState = atom({
-  key: 'BannerState',
-  default: []
+const initialState = {
+  banner: [],
+  recommendList: [],
+}
+
+export const homeSlice = createSlice({
+  name: 'home',
+  initialState,
+  reducers: {
+    setBanner(state, { payload }) {
+      state.banner = payload
+    },
+    setRecommend(state, { payload }) {
+      state.recommendList = payload
+    }
+  }
 })
 
-export const recommendState = atom({
-  key: 'RecommendState',
-  default: []
-})
+export const { setBanner, setRecommend } = homeSlice.actions
+export default homeSlice.reducer
