@@ -29,15 +29,15 @@
 .swiper-indicator-container {
   position: absolute;
   width: 100%;
-  bottom: 20px;
+  bottom: 10px;
   display: flex;
   justify-content: center;
   align-items: center;
 }
 .swiper-indicator-item {
   display: inline-block;
-  width: 8px;
-  height: 8px;
+  width: 6px;
+  height: 6px;
   margin: 0 10px;
   border-radius: 50%;
   background: #fff;

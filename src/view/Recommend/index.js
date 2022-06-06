@@ -2,7 +2,15 @@ import Swiper from 'components/Swiper'
 import SwiperItem from 'components/Swiper/Item'
 import React, { useState, useEffect } from 'react'
 import List from './List'
+import styled from 'styled-components';
+import Scroll from 'components/Scroll';
 
+const Content = styled.div`
+  position: fixed;
+  top: 90px;
+  bottom: 0;
+  width: 100%;
+`
 export default function Recommend() {
   const bannerList = [
     "http://p1.music.126.net/Psbo5OrzeRxzLGQnrjIzig==/109951167499120247.jpg?imageView&quality=89",
@@ -26,17 +34,21 @@ export default function Recommend() {
   
 
   return (
-    <>
-      <Swiper>
-        {
-          bannerList.map((item, index) => (
-            <SwiperItem key={index}>
-              <img src={item} alt=''></img>
-            </SwiperItem>
-          ))
-        }
-      </Swiper>
-      <List recommendList={recommendList}></List>
-    </>
+    <Content>
+      <Scroll className="list">
+        <div>
+          <Swiper>
+            {
+              bannerList.map((item, index) => (
+                <SwiperItem key={index}>
+                  <img src={item} alt=''></img>
+                </SwiperItem>
+              ))
+            }
+          </Swiper>
+          <List recommendList={recommendList}></List>
+        </div>
+      </Scroll>
+    </Content>
   )
 }
