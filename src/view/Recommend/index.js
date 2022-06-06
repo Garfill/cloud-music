@@ -10,6 +10,8 @@ import { getBanner, getRecommend } from 'api/home';
 import { useSelector, useDispatch } from 'react-redux';
 import { setBanner, setRecommend } from 'store/home';
 
+import { forceCheck } from 'react-lazyload';
+
 const Content = styled.div`
   height: calc(100vh - 94px);
 `
@@ -35,7 +37,7 @@ export default function Recommend() {
 
   return (
     <Content>
-      <Scroll className="list">
+      <Scroll className="list" onScroll={forceCheck}>
         <div>
           <Swiper>
             {

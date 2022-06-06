@@ -10,7 +10,7 @@ const ScrollContainer = styled.div`
 
 const Scroll = forwardRef((props, ref) => {
   const [bScroll, setBScroll] = useState(null);
-  const scrollContainerRef = useRef();
+  const scrollContainerRef = useRef(null);
 
   const {
     direction = 'vertical',
