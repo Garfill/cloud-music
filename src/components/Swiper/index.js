@@ -15,9 +15,10 @@ export default function Swiper(props) {
   }
 
   useEffect(() => {
+    if (!children.length) return
     run(active)
     return () => { clearTimeout(timer) }
-  }, [active])
+  }, [active, children])
 
   return (
     <div className='swiper-container'>

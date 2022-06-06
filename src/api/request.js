@@ -2,14 +2,14 @@ import axios from 'axios';
 
 class Request {
   constructor(options) {
-    this.rawOptions = config;
+    this.rawOptions = options;
     const {
       baseURL = '/',
       headers = null,
       timeout = 1000 * 60 * 5,
       requestInterceptor = null,
       responseInterceptor = null,
-    } = config
+    } = options
 
     // 初始化实例
     this.instance = axios.create({
@@ -23,12 +23,14 @@ class Request {
       if (typeof requestInterceptor === 'function') {
         this.instance.interceptors.request.use(requestInterceptor, (error) => {
           // 请求出错
+          console.log(error, "网络出错111")
           return Promise.reject(error)
         })
       } else if (Array.isArray(requestInterceptor)) {
         requestInterceptor.forEach(item => {
           this.instance.interceptors.request.use(item, (error) => {
             // 请求出错
+            console.log(error, "网络出错111")
             return Promise.reject(error)
           })
         })
@@ -38,12 +40,14 @@ class Request {
       if (typeof responseInterceptor === 'function') {
         this.instance.interceptors.response.use(responseInterceptor, (error) => {
           // 请求出错
+          console.log(error, "网络出错222")
           return Promise.reject(error)
         })
       } else if (Array.isArray(responseInterceptor)) {
         responseInterceptor.forEach(item => {
           this.instance.interceptors.response.use(item, (error) => {
             // 请求出错
+            console.log(error, "网络出错222")
             return Promise.reject(error)
           })
         })
@@ -94,8 +98,33 @@ class Request {
           resolve(response.data)
         })
         .catch(error => {
+          console.log(error, "网络出错333")
           reject(error)
         })
+    })
+  }
+
+  get(options) {
+    if (typeof options === 'string') {
+      options = {
+        url: options,
+      }
+    }
+    return this.request({
+      ...options,
+      method: 'get',
+    })
+  }
+
+  post(options) {
+    if (typeof options === 'string') {
+      options = {
+        url: options,
+      }
+    }
+    return this.request({
+      ...options,
+      method: 'post',
     })
   }
 

@@ -5,31 +5,31 @@ import List from './List'
 import styled from 'styled-components';
 import Scroll from 'components/Scroll';
 
+// recoil state
+import { useRecoilState } from 'recoil';
+import { bannerState, recommendState } from 'store/home';
+
+// api
+import { getBanner, getRecommend } from 'api/home';
+
 const Content = styled.div`
-  position: fixed;
-  top: 90px;
-  bottom: 0;
-  width: 100%;
+  height: calc(100vh - 94px);
 `
 export default function Recommend() {
-  const bannerList = [
-    "http://p1.music.126.net/Psbo5OrzeRxzLGQnrjIzig==/109951167499120247.jpg?imageView&quality=89",
-    "http://p1.music.126.net/hHj81Oi3yQiFEp7BfUhKYQ==/109951167497696790.jpg?imageView&quality=89",
-    "http://p1.music.126.net/tBHeY_3kFHwEQ5vJuJrwMA==/109951167497702170.jpg?imageView&quality=89",
-    "http://p1.music.126.net/EYoeQf1UO87VsjLSM8UrTA==/109951167498797892.jpg?imageView&quality=89"
-  ]
-
-  const [recommendList, setRecommendList] = useState([])
+  const [banner, setBanner] = useRecoilState(bannerState);
+  const [recommendList, setRecommendList] = useRecoilState(recommendState)
   
+  async function initData() {
+    const [{ banners }, { result }] = await Promise.all([
+      getBanner(),
+      getRecommend()
+    ]);
+    setBanner(banners);
+    setRecommendList(result)
+  }
+
   useEffect(() => {
-    setRecommendList(new Array(9).fill(null).map(item => {
-      return {
-        id: 1,
-        picUrl: "https://p1.music.126.net/fhmefjUfMD-8qtj3JKeHbA==/18999560928537533.jpg",
-        playCount: 17171122,
-        name: "朴树、许巍、李健、郑钧、老狼、赵雷"
-      }
-    }))
+    initData()
   }, [])
   
 
@@ -39,9 +39,9 @@ export default function Recommend() {
         <div>
           <Swiper>
             {
-              bannerList.map((item, index) => (
+              banner.map((item, index) => (
                 <SwiperItem key={index}>
-                  <img src={item} alt=''></img>
+                  <img src={item.imageUrl} alt=''></img>
                 </SwiperItem>
               ))
             }
