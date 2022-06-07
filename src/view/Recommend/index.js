@@ -5,10 +5,9 @@ import List from './List'
 import styled from 'styled-components';
 import Scroll from 'components/Scroll';
 
-// api
-import { getBanner, getRecommend } from 'api/home';
+// store
 import { useSelector, useDispatch } from 'react-redux';
-import { setBanner, setRecommend } from 'store/home';
+import { getHomeData } from 'store/home'
 
 import { forceCheck } from 'react-lazyload';
 
@@ -22,12 +21,8 @@ export default function Recommend() {
   const dispatch = useDispatch()
   
   async function initData() {
-    const [{ banners }, { result }] = await Promise.all([
-      getBanner(),
-      getRecommend()
-    ]);
-    dispatch(setBanner(banners));
-    dispatch(setRecommend(result));
+    if (banner.length > 0 && recommendList.length > 0) return;
+    dispatch(getHomeData())
   }
 
   useEffect(() => {
