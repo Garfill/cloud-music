@@ -1,16 +1,17 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { getBanner, getRecommend } from 'api/home';
+import { getBanner, getRecommend, getRank } from 'api/home';
 import { getHotSingerListRequest } from 'api/singer'
 
 
 const initialState = {
   banner: [],
   recommendList: [],
-
-
+  
   singerList: [],
   listEnd: false,
   listLoading: false,
+
+  rankList: [],
 }
 
 export const getHomeData = createAsyncThunk(
@@ -30,17 +31,18 @@ export const getHomeData = createAsyncThunk(
 export const getHotSinger = createAsyncThunk(
   'home/getHotSingerData',
   async (count, { dispatch }) => {
-    dispatch({
-      type: 'home/setLoading',
-      payload: true
-    });
     const { artists, more } = await getHotSingerListRequest(count);
-    dispatch({
-      type: 'home/setLoading',
-      payload: false
-    });
     return {artists, more};
   }
+)
+
+export const getRankData = createAsyncThunk(
+  'home/getRankData',
+  async (_, { dispatch }) => {
+    const res = await getRank();
+    return res;
+  }
+
 )
 
 export const homeSlice = createSlice({
@@ -65,11 +67,18 @@ export const homeSlice = createSlice({
       state.banner = payload.banner;
       state.recommendList = payload.recommend;
     },
+    [getHotSinger.pending]: (state, { payload }) => {
+      state.listLoading = true;
+    },
     [getHotSinger.fulfilled]: (state, { payload }) => {
       if (!payload.more) {
         state.listEnd = true;
       }
       state.singerList = state.singerList.concat(payload.artists);
+      state.listLoading = false;
+    },
+    [getRankData.fulfilled]: (state, { payload }) => {
+      state.rankList = payload.list;
     }
   }
 })

@@ -38,9 +38,3 @@ export const ListItem = styled.div`
   }
 `;
 
-export const ListFooter = styled.div`
-  padding: 5px 0;
-  text-align: center;
-  color: var(--font-color-desc);
-`
-

@@ -2,15 +2,18 @@ import {
   ListContainer,
   List,
   ListItem,
-  ListFooter,
 } from "./style";
 
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useContext } from 'react'
 import { useDispatch, useSelector } from "react-redux";
 import Scroll from "components/Scroll";
 
 // store
 import { getHotSinger } from 'store/home'
+import { debounce } from "utils";
+// context 
+import { DataContext } from 'context/data';
+
 
 const STEP = 20;
 
@@ -19,13 +22,22 @@ export default function SingerList() {
   const listEnd = useSelector(state => state.home.listEnd);
   const listLoading = useSelector(state => state.home.listLoading);
   const dispatch = useDispatch();
-  const [offset, setOffset] = useState(0);
+
+
+  const data = useContext(DataContext);
+  const { dispatch: dataDispatch } = data;
+  const offset = data.state.count
+
   const getMoreSinger = (count) => {
     if (listEnd || listLoading) return;
     if (count === undefined) count = offset + STEP;
     dispatch(getHotSinger(count))
-    setOffset(count)
+    dataDispatch({
+      type: 'SET_COUNT',
+      payload: count,
+    })
   }
+  const debounceGetMoreSinger = useMemo(() => debounce(getMoreSinger, 300), [getMoreSinger])
 
   useEffect(() => {
     if (!singerList.length) {
@@ -33,24 +45,12 @@ export default function SingerList() {
     }
   }, [])
   
-
-  const renderListFooter = () => {
-    return (
-      <ListFooter>
-        {
-          listEnd 
-            ? '没有更多了'
-            : listLoading ?
-              (<span>加载中...</span>) : (null)
-        }
-      </ListFooter>
-    )
-  }
-
   return (
     <ListContainer>
       <Scroll
-        pullUp={getMoreSinger}
+        pullUp={debounceGetMoreSinger}
+        pullUpLoading={listLoading}
+        end={listEnd}
       >
         <List>
           {
@@ -65,7 +65,6 @@ export default function SingerList() {
               )
             })
           }
-          {renderListFooter()}
         </List>
       </Scroll>
     </ListContainer>

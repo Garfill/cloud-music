@@ -13,11 +13,11 @@ import { store } from 'store'
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  <Provider store={store}>
-    <HashRouter>
+  <HashRouter>
+    <Provider store={store}>
       <App />
-    </HashRouter>
-  </Provider>
+    </Provider>
+  </HashRouter>
 );
 
 // If you want to start measuring performance in your app, pass a function

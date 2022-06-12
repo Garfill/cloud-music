@@ -7,3 +7,7 @@ export function getBanner() {
 export function getRecommend() {
   return ajax.get('/personalized')
 }
+
+export function getRank() {
+  return ajax.get(`/toplist/detail`)
+}
