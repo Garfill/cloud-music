@@ -16,8 +16,6 @@ const Scroll = forwardRef((props, ref) => {
     direction = 'vertical',
     click = true,
     refresh = true,
-    pullUpLoading = false,
-    pullDownLoading = false,
     bounceTop = true,
     bounceBottom = true } = props;
   const { pullUp, pullDown, onScroll } = props;
