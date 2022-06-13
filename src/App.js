@@ -1,6 +1,8 @@
-import Layout from "layout";
 import { useReducer } from "react";
 import { DataContext } from 'context/data';
+import { renderRoutes } from "router";
+import routes from 'router'
+import { Routes } from "react-router-dom";
 
 function reducer(state, { type, payload }) {
   switch (type) {
@@ -17,7 +19,9 @@ function App() {
   })
   return (
     <DataContext.Provider value={{ state, dispatch }}>
-      <Layout></Layout>
+      <Routes>
+        { renderRoutes(routes) }
+      </Routes>
     </DataContext.Provider>
   );
 }

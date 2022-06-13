@@ -1,11 +1,12 @@
+import Layout from 'layout'
 import React from 'react'
 import { Outlet } from 'react-router-dom'
 function Home() {
 
   return (
-    <div>
+    <Layout>
       <Outlet></Outlet>
-    </div>
+    </Layout>
   )
 }
 
