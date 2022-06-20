@@ -18,7 +18,7 @@ const routes = [
       },
       {
         path: 'singer',
-        component: wrap('Singer'),
+        component: wrap('Singers'),
       },
       {
         path: 'recommend',
@@ -41,8 +41,11 @@ const routes = [
   {
     path: '/rank/:id',
     component: wrap('Album'),
+  },
+  {
+    path: '/singer/:id',
+    component: wrap('Singer'),
   }
-
 ]
 
 export default routes

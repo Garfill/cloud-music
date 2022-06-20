@@ -1,192 +1,68 @@
-import Horizon from 'components/Horizon'
-import React, { useState } from 'react'
-import styled from 'styled-components'
-import SingerList from './List';
+import React, { useEffect, useRef, useState } from 'react'
+import { useParams } from 'react-router-dom'
+import { getHotSong, getSinger } from 'api/singer'
+import './style.scss'
+import SongList from 'components/SongList'
+import Scroll from 'components/Scroll'
+
+export default function Singer(props) {
+  const { id } = useParams()
+  const [singer, setSinger] = useState({})
+  const [hotSong, setHotSong] = useState([])
+  async function getSingerData(id) {
+    const [{ data }, { songs }] = await Promise.all([
+      getSinger(id),
+      getHotSong(id)
+    ])
+    setSinger(data)
+    setHotSong(songs)
+  }
+
+  const scrollRef = useRef()
+  const songScrollRef = useRef()
+  const imgRef = useRef()
+  const initHeight = useRef()
+
+  useEffect(() => {
+    getSingerData(id).then(() => {
+      const h = imgRef.current.offsetHeight;
+      scrollRef.current.style.top = h + 'px';
+      initHeight.current = h;
+      songScrollRef.current.refresh();
+    })
+  }, [])
 
 
-const categoryTypes = [{
-  name: "华语男",
-  key: "1001"
-},
-{
-  name: "华语女",
-  key: "1002"
-},
-{
-  name: "华语组合",
-  key: "1003"
-},
-{
-  name: "欧美男",
-  key: "2001"
-},
-{
-  name: "欧美女",
-  key: "2002"
-},
-{
-  name: "欧美组合",
-  key: "2003"
-},
-{
-  name: "日本男",
-  key: "6001"
-},
-{
-  name: "日本女",
-  key: "6002"
-},
-{
-  name: "日本组合",
-  key: "6003"
-},
-{
-  name: "韩国男",
-  key: "7001"
-},
-{
-  name: "韩国女",
-  key: "7002"
-},
-{
-  name: "韩国组合",
-  key: "7003"
-},
-{
-  name: "其他男歌手",
-  key: "4001"
-},
-{
-  name: "其他女歌手",
-  key: "4002"
-},
-{
-  name: "其他组合",
-  key: "4003"
-},
-];
-// 歌手首字母
-export const alphaTypes = [{
-  key: "A",
-  name: "A"
-},
-{
-  key: "B",
-  name: "B"
-},
-{
-  key: "C",
-  name: "C"
-},
-{
-  key: "D",
-  name: "D"
-},
-{
-  key: "E",
-  name: "E"
-},
-{
-  key: "F",
-  name: "F"
-},
-{
-  key: "G",
-  name: "G"
-},
-{
-  key: "H",
-  name: "H"
-},
-{
-  key: "I",
-  name: "I"
-},
-{
-  key: "J",
-  name: "J"
-},
-{
-  key: "K",
-  name: "K"
-},
-{
-  key: "L",
-  name: "L"
-},
-{
-  key: "M",
-  name: "M"
-},
-{
-  key: "N",
-  name: "N"
-},
-{
-  key: "O",
-  name: "O"
-},
-{
-  key: "P",
-  name: "P"
-},
-{
-  key: "Q",
-  name: "Q"
-},
-{
-  key: "R",
-  name: "R"
-},
-{
-  key: "S",
-  name: "S"
-},
-{
-  key: "T",
-  name: "T"
-},
-{
-  key: "U",
-  name: "U"
-},
-{
-  key: "V",
-  name: "V"
-},
-{
-  key: "W",
-  name: "W"
-},
-{
-  key: "X",
-  name: "X"
-},
-{
-  key: "Y",
-  name: "Y"
-},
-{
-  key: "Z",
-  name: "Z"
-}
-];
+  const handleScroll = (pos) => {
+    const { y } = pos;
+    const percent = Math.abs(y / initHeight.current);
+    const imageDOM = imgRef.current;
+    const minScrollY = -initHeight.current;
 
-const NavContainer = styled.div`
-  padding: 0 5px;
-`
-export default function Singer() {
-  const [category, setCategory] = useState(null)
-  const [alpha, setAlpha] = useState(null)
-  const onClickCategory = (key) => setCategory(key)
-  const onClickAlpha = (key) => setAlpha(key)
+    if (y > 0) {
+      imageDOM.style['transform'] = `scale(${1 + percent})`;
+    } else if (y >= minScrollY) {
+      imageDOM.style.paddingBottom = "83%";
+      imageDOM.style.height = 0;
+      imageDOM.style.zIndex = -1;
+
+      scrollRef.current.style.top = initHeight.current - Math.abs(y) + 'px';
+    } else if (y < minScrollY) {
+      imageDOM.style.paddingBottom = 0;
+      imageDOM.style.zIndex = 99;
+    }
+  }
+
   return (
-    <>
-      <NavContainer>
-        <Horizon list={categoryTypes} title="分类 (默认热门):" active={category} handleClickItem={onClickCategory}></Horizon>
-        <Horizon list={alphaTypes} title="首字母:" active={alpha} handleClickItem={onClickAlpha}></Horizon>
-      </NavContainer>
-      <SingerList></SingerList>
-    </>
+    <div>
+      <div className='singer-hd' ref={imgRef}>
+        <img src={singer.artist?.cover}></img>
+      </div>
+      <div className='singer-hot-song' ref={scrollRef}>
+        <Scroll ref={songScrollRef} onScroll={handleScroll}>
+          <SongList songs={hotSong}></SongList>
+        </Scroll>
+      </div>
+    </div>
   )
 }

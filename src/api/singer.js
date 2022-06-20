@@ -34,3 +34,21 @@ export const getSingerListRequest = (category, alpha, count) => {
   return ajax.get(`/artist/list?${type && area ? `type=${type}&area=${area}` : ''
     }&initial=${alpha.toLowerCase()}&offset=${count}`)
 };
+
+export const getSinger = (id) => {
+  return ajax.get({
+    url: '/artist/detail',
+    data: {
+      id
+    }
+  })
+}
+
+export const getHotSong = (id) => {
+  return ajax.get({
+    url: '/artist/top/song',
+    data: {
+      id,
+    }
+  })
+}

@@ -7,6 +7,7 @@ import { CSSTransition } from 'react-transition-group';
 import { getPlayList } from 'api/album'
 // style
 import './style.scss'
+import SongList from 'components/SongList';
 
 function Album() {
   const [show, setShow] = useState(true);
@@ -29,6 +30,10 @@ function Album() {
   useEffect(() => {
     getAlbum(id);
   }, [])
+
+  const navToSong = (id) => {
+    nav('/song/' + id);
+  }
 
 
   return (
@@ -64,21 +69,7 @@ function Album() {
             歌曲列表
           </div>
           <div className='pl-body-list'>
-            {
-              songs.map((item, index) => {
-                return (
-                  <Link className='pl-item' to={`/song/${item.id}`}>
-                    <div className='pl-item-num'>{index + 1}</div>
-                    <div className='pl-item-info'>
-                      <div className='pl-item-name'>{item.name}</div>
-                      <div className='pl-item-album'>
-                        { item.ar[0]?.name } - { item.al?.name }
-                      </div>
-                    </div>
-                  </Link>
-                )
-              })
-            }
+            <SongList songs={songs} handleClick={navToSong}></SongList>
           </div>
         </div>
       </section>

@@ -13,6 +13,7 @@ import { getHotSinger } from 'store/home'
 import { debounce } from "utils";
 // context 
 import { DataContext } from 'context/data';
+import { useNavigate } from "react-router-dom";
 
 
 const STEP = 20;
@@ -22,7 +23,6 @@ export default function SingerList() {
   const listEnd = useSelector(state => state.home.listEnd);
   const listLoading = useSelector(state => state.home.listLoading);
   const dispatch = useDispatch();
-
 
   const data = useContext(DataContext);
   const { dispatch: dataDispatch } = data;
@@ -44,6 +44,12 @@ export default function SingerList() {
       getMoreSinger(0);
     }
   }, [])
+
+
+  const nav = useNavigate()
+  const enterDetail = (detail) => {
+    nav(`/singer/${detail.id}`);
+  }
   
   return (
     <ListContainer>
@@ -56,7 +62,7 @@ export default function SingerList() {
           {
             singerList.map((item, index) => {
               return (
-                <ListItem key={item.accountId + "" + index}>
+                <ListItem key={item.accountId + "" + index} onClick={() => {enterDetail(item)}}>
                   <div className="img_wrapper">
                     <img src={`${item.picUrl}?param=300x300`} width="100%" height="100%" alt="music" />
                   </div>
