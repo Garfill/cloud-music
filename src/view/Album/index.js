@@ -1,19 +1,35 @@
-import React, { memo, useState } from 'react'
-import { useNavigate } from 'react-router-dom';
+import React, { memo, useEffect, useMemo, useState } from 'react'
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { CSSTransition } from 'react-transition-group';
-import Header from './component/header';
 
 
 // api
 import { getPlayList } from 'api/album'
+// style
+import './style.scss'
 
 function Album() {
   const [show, setShow] = useState(true);
   const nav = useNavigate();
-
   function back() {
     nav(-1)
   }
+
+  const [album, setAlbum] = useState({});
+  const [songs, setSongs] = useState([]);
+  async function getAlbum(id) {
+    const { playlist } = await getPlayList({ id });
+    setAlbum(playlist);
+    setSongs(playlist.tracks??[]);
+  }
+  const { id } = useParams();
+  const headBackStyle = useMemo(() => {
+    return album.coverImgUrl ? { backgroundImage: 'url(' + album.coverImgUrl + ')' } : { backgroundImage: '' }
+  }, [album])
+  useEffect(() => {
+    getAlbum(id);
+  }, [])
+
 
   return (
     <CSSTransition
@@ -24,7 +40,48 @@ function Album() {
       classNames="page-animate"
       onExited={back}
     >
-      <Header title='返回' handleClick={() => setShow(false)}></Header>
+      <section>
+        <div className='pl-head'>
+          <div className='pl-head-bg abs-all-zero' style={headBackStyle}></div>
+          <div className='pl-head-wrap'>
+            <div className='pl-head-img'>
+              <img src={album.coverImgUrl}></img>
+            </div>
+            <div className='pl-head-info'>
+              <div className='pl-head-title two-line'>{album.name}</div>
+              <div className='pl-head-person'>
+                <div className='pl-head-avatar'>
+                  <img src={album.creator?.avatarUrl}></img>
+                </div>
+                {album.creator?.nickname}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className='pl-body'>
+          <div className='pl-body-title'>
+            歌曲列表
+          </div>
+          <div className='pl-body-list'>
+            {
+              songs.map((item, index) => {
+                return (
+                  <Link className='pl-item' to={`/song/${item.id}`}>
+                    <div className='pl-item-num'>{index + 1}</div>
+                    <div className='pl-item-info'>
+                      <div className='pl-item-name'>{item.name}</div>
+                      <div className='pl-item-album'>
+                        { item.ar[0]?.name } - { item.al?.name }
+                      </div>
+                    </div>
+                  </Link>
+                )
+              })
+            }
+          </div>
+        </div>
+      </section>
     </CSSTransition>
   )
 }

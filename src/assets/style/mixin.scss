@@ -6,3 +6,11 @@
   -webkit-line-clamp: $line;
   -webkit-box-orient: vertical;
 }
+
+@mixin pos-all-zero($pos) {
+  position: $pos;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}

@@ -43,3 +43,8 @@
     display: block;
   }
 }
+
+// 绝对定位
+.abs-all-zero {
+  @include pos-all-zero(absolute);
+}

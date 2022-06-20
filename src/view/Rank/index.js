@@ -1,7 +1,7 @@
 import Scroll from 'components/Scroll';
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import { Outlet } from 'react-router-dom';
+import { Outlet, useNavigate } from 'react-router-dom';
 import { Container, List, ListItem, SongList } from './style'
 import { getRankData } from 'store/home';
 
@@ -15,13 +15,17 @@ const filterIndex = rankList => {
 };
 
 export default function Rank() {
+  const nav = useNavigate();
+  const enterDetail = (detail) => {
+    nav(`/rank/${detail.id}`);
+  }
   const renderRankList = (list, global) => {
     return (
       <List globalRank={global}>
         {
           list.map((item) => {
             return (
-              <ListItem key={item.coverImgId} tracks={item.tracks}>
+              <ListItem key={item.coverImgId} tracks={item.tracks} onClick={() => enterDetail(item)}>
                 <div className="img_wrapper">
                   <img src={item.coverImgUrl} alt="" />
                   <div className="decorate"></div>

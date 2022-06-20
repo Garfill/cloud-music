@@ -1,7 +1,6 @@
 import { useReducer } from "react";
 import { DataContext } from 'context/data';
-import { renderRoutes } from "router";
-import routes from 'router'
+import routes, { renderRoutes } from "router";
 import { Routes } from "react-router-dom";
 
 function reducer(state, { type, payload }) {

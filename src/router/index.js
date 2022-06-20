@@ -38,6 +38,10 @@ const routes = [
     path: '/album/:id',
     component: wrap('Album'),
   },
+  {
+    path: '/rank/:id',
+    component: wrap('Album'),
+  }
 
 ]
 
