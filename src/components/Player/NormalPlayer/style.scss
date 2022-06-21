@@ -1,0 +1,41 @@
+@keyframes scaleAnimate {
+  0% {
+    transform: scale(0.8);
+  }
+
+  60% {
+    transform: scale(1.2);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}
+
+.normal-enter {
+  .cd-wrapper {
+    animation: scaleAnimate .5s linear;
+  }
+
+  .top {
+    transform: translate3d(0, -100px, 0);
+  }
+
+  .bottom {
+    transform: translate3d(0, 100px, 0);
+  }
+}
+
+.normal-enter-active {
+  .top, .bottom {
+    transition: transform .3s cubic-bezier(0.86, 0.18, 0.82, 1.32);
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+.normal-exit-active {
+  .top, .bottom {
+    transition: all .5s linear;
+    opacity: 0;
+  }
+}
