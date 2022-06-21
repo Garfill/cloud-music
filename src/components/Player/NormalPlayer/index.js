@@ -1,3 +1,4 @@
+import ProgressBar from 'components/ProgressBar';
 import React, { memo } from 'react'
 import { CSSTransition } from 'react-transition-group';
 import {
@@ -49,6 +50,13 @@ function NormalPlayer(props) {
           </CDWrapper>
         </Middle>
         <Bottom className="bottom">
+          <div className='progress-bar-box'>
+            <span className="time time-l">0:00</span>
+            <div className='progress-bar'>
+              <ProgressBar></ProgressBar>
+            </div>
+            <div className="time time-r">4:17</div>
+          </div>
           <Operators>
             <div className="icon i-left" >
               <i className="iconfont">圈</i>

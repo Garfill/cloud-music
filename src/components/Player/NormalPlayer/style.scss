@@ -39,3 +39,16 @@
     opacity: 0;
   }
 }
+
+
+// progress
+.progress-bar-box {
+  display: flex;
+  align-items: center;
+  .time {
+    padding: 0 10px;
+  }
+  .progress-bar {
+    flex: 1 1;
+  }
+}
