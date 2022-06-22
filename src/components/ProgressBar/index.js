@@ -1,8 +1,8 @@
-import React, { useRef, useState } from 'react'
+import React, { useRef, useState, useEffect } from 'react'
 import './style.scss'
 
 export default function ProgressBar(props) {
-  const { percentChange } = props;
+  const { percentChange, percent } = props;
   const progressBar = useRef(null)
   const progress = useRef(null)
   const progressBtn = useRef(null)
@@ -47,6 +47,16 @@ export default function ProgressBar(props) {
       percentChange(percent)
     }
   }
+
+  useEffect(() => {
+    if (percent >= 0 && percent <= 1 && !touch.init) {
+      const barWidth = progressBar.current.clientWidth;
+      const offset = barWidth * percent;
+      setOffset(offset)
+    }
+  }, [percent])
+  
+
   return (
     <div className='bar-wrapper'>
       <div className="bar-inner" ref={progressBar} onClick={handleClick}>

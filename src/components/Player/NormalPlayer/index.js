@@ -1,5 +1,5 @@
 import ProgressBar from 'components/ProgressBar';
-import React, { memo } from 'react'
+import React, { memo, useEffect } from 'react'
 import { CSSTransition } from 'react-transition-group';
 import { isEmptyObj } from 'utils';
 import {
@@ -13,7 +13,20 @@ import {
 import './style.scss'
 
 function NormalPlayer(props) {
-  const { song, fullScreen, togglePlayer } = props;
+  const { song, fullScreen, togglePlayer, playing, currentTime, duration } = props;
+  const { clickPlay, onProgressChange } = props;
+
+  const handleClick = (e) => {
+    e.stopPropagation();
+    clickPlay(!playing)
+  }
+
+  const formatTime = (time) => {
+    time = time | 0;
+    const minute = (time / 60) | 0;
+    const second = (time % 60).toString().padStart(2, '0')
+    return `${minute}:${second}`
+  }  
   return (
     <>
       {
@@ -46,7 +59,7 @@ function NormalPlayer(props) {
               <CDWrapper className='cd-wrapper'>
                 <div className="cd">
                   <img
-                    className="image"
+                      className={`image play ${playing ? "" : "pause"}`}
                     src={song.al.picUrl + "?param=400x400"}
                     alt=""
                   />
@@ -55,11 +68,11 @@ function NormalPlayer(props) {
             </Middle>
             <Bottom className="bottom">
               <div className='progress-bar-box'>
-                <span className="time time-l">0:00</span>
+                <span className="time time-l">{ formatTime(currentTime)}</span>
                 <div className='progress-bar'>
-                  <ProgressBar></ProgressBar>
+                  <ProgressBar percentChange={onProgressChange} percent={props.percent}></ProgressBar>
                 </div>
-                <div className="time time-r">4:17</div>
+                <div className="time time-r">{ formatTime(duration) }</div>
               </div>
               <Operators>
                 <div className="icon i-left" >
@@ -68,7 +81,7 @@ function NormalPlayer(props) {
                 <div className="icon i-left">
                   <i className="iconfont">上</i>
                 </div>
-                <div className="icon i-center">
+                <div className="icon i-center" onClick={handleClick}>
                   <i className="iconfont">播</i>
                 </div>
                 <div className="icon i-right">
