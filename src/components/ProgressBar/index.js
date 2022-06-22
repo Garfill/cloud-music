@@ -1,9 +1,8 @@
 import React, { useRef, useState } from 'react'
 import './style.scss'
 
-const halfBtnWidth = 4; // 以按钮中心设置距离，4是按钮宽度 / 2
-
-export default function ProgressBar() {
+export default function ProgressBar(props) {
+  const { percentChange } = props;
   const progressBar = useRef(null)
   const progress = useRef(null)
   const progressBtn = useRef(null)
@@ -24,7 +23,7 @@ export default function ProgressBar() {
     if (!touch.init) return;
     // 滑动距离
     const deltaX = e.touches[0].clientX - touch.startX;
-    const maxWidth = progressBar.current.clientWidth - halfBtnWidth;
+    const maxWidth = progressBar.current.clientWidth;
     const offsetX = Math.min(maxWidth, Math.max(0, touch.leftWitdh + deltaX));
     setOffset(offsetX);
   }
@@ -32,11 +31,21 @@ export default function ProgressBar() {
     const endTouch = JSON.parse(JSON.stringify(touch));
     endTouch.init = false;
     setTouch(endTouch);
+
+    _changePercent(progress.current.clientWidth / progressBar.current.clientWidth)
   }
   const handleClick = e => {
     const left = e.pageX - progressBar.current.getBoundingClientRect().left;
-    const offset = Math.min(left, progressBar.current.clientWidth - halfBtnWidth)
+    const offset = Math.min(left, progressBar.current.clientWidth)
     setOffset(offset)
+
+    _changePercent(progress.current.clientWidth / progressBar.current.clientWidth)
+  }
+
+  const _changePercent = (percent) => {
+    if (percentChange) {
+      percentChange(percent)
+    }
   }
   return (
     <div className='bar-wrapper'>

@@ -1,5 +1,4 @@
 @mixin multi-line-hidden($line) {
-  white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   display: -webkit-box;

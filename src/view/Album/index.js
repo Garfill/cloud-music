@@ -1,35 +1,34 @@
 import React, { memo, useEffect, useMemo, useState } from 'react'
-import { Link, useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { CSSTransition } from 'react-transition-group';
+import { getAlbum } from 'store/album'
 
-
-// api
-import { getPlayList } from 'api/album'
 // style
 import './style.scss'
 import SongList from 'components/SongList';
+import { useDispatch, useSelector } from 'react-redux';
 
 function Album() {
   const [show, setShow] = useState(true);
+  const dispatch = useDispatch()
   const nav = useNavigate();
   function back() {
     nav(-1)
   }
 
-  const [album, setAlbum] = useState({});
-  const [songs, setSongs] = useState([]);
-  async function getAlbum(id) {
-    const { playlist } = await getPlayList({ id });
-    setAlbum(playlist);
-    setSongs(playlist.tracks??[]);
+  const album = useSelector(state => state.album.album)
+  const songs = useSelector(state => state.player.playList)
+  async function getAlbumData(id) {
+    dispatch(getAlbum(id))
   }
   const { id } = useParams();
+  useEffect(() => {
+    getAlbumData(id);
+  }, [])
+
   const headBackStyle = useMemo(() => {
     return album.coverImgUrl ? { backgroundImage: 'url(' + album.coverImgUrl + ')' } : { backgroundImage: '' }
   }, [album])
-  useEffect(() => {
-    getAlbum(id);
-  }, [])
 
   const navToSong = (id) => {
     nav('/song/' + id);

@@ -34,8 +34,8 @@
 }
 
 .normal-exit-active {
-  .top, .bottom {
-    transition: all .5s linear;
+  .top, .bottom, .cd-wrapper {
+    transition: all .2s linear;
     opacity: 0;
   }
 }

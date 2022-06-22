@@ -38,7 +38,7 @@ function RecommendList(props) {
                     <span className="count">{getCount(item.playCount)}</span>
                   </div>
                 </div>
-                <div className="desc">{item.name}</div>
+                <div className="desc two-line">{item.name}</div>
               </div>
             )
           })

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { setPlayer } from 'store/player'
 import MiniPlayer from './MiniPlayer'
@@ -13,16 +13,14 @@ export default function Player(props) {
     }))
   }
 
-  const currentSong = {
-    al: { picUrl: "https://p1.music.126.net/JL_id1CFwNJpzgrXwemh4Q==/109951164172892390.jpg" },
-    name: "木偶人",
-    ar: [{ name: "薛之谦" }]
-  }
+  const currentSong = useSelector(state => state.player.currentSong)
+  const audioRef = useRef(null)
 
   return (
     <div>
       <MiniPlayer song={currentSong} fullScreen={fullScreen} togglePlayer={togglePlayer}></MiniPlayer>
       <NormalPlayer song={currentSong} fullScreen={fullScreen} togglePlayer={togglePlayer}></NormalPlayer>
+      <audio ref={audioRef}></audio>
     </div>
   )
 }

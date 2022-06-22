@@ -1,4 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
+import { isEmptyObj } from 'utils';
 // 播放模式
 export const playMode = {
   sequence: 0,
@@ -24,9 +25,15 @@ export const playerSlice = createSlice({
       for (let p in payload) {
         state[p] = payload[p]
       }
+    },
+    setPlayList(state, { payload }) {
+      state.playList = payload;
+      if (isEmptyObj(state.currentSong)) {
+        state.currentSong = payload[0]  
+      }
     }
   }
 })
 
-export const { setPlayer } = playerSlice.actions
+export const { setPlayer, setPlayList } = playerSlice.actions
 export default playerSlice.reducer
