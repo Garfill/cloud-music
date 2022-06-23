@@ -39,9 +39,13 @@ export default function Player(props) {
   }
   const toggleMusic = (isPlay) => {
     if (isPlay) {
-      setTimeout(() => {
-        audioRef.current.play()
-      }, 0);
+      try {
+        setTimeout(() => {
+          audioRef.current.play()
+        }, 0);
+      } catch {
+        return
+      }
     } else {
       audioRef.current.pause()
     }
@@ -52,6 +56,7 @@ export default function Player(props) {
 
   useEffect(() => {
     if (isEmptyObj(currentSong)) return;
+    clickPlay(false)
     audioRef.current.src = getSongUrl(currentSong.id)
     setCurrentTime(0)
     setDuration((currentSong.dt / 1000) | 0);

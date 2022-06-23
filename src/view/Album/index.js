@@ -7,6 +7,7 @@ import { getAlbum } from 'store/album'
 import './style.scss'
 import SongList from 'components/SongList';
 import { useDispatch, useSelector } from 'react-redux';
+import { setPlayer } from 'store/player';
 
 function Album() {
   const [show, setShow] = useState(true);
@@ -34,6 +35,12 @@ function Album() {
     nav('/song/' + id);
   }
 
+  const handleChangeSong = (song, index) => {
+    dispatch(setPlayer({
+      currentSong: song,
+      currentIndex: index,
+    }))
+  }
 
   return (
     <CSSTransition
@@ -68,7 +75,7 @@ function Album() {
             歌曲列表
           </div>
           <div className='pl-body-list'>
-            <SongList songs={songs} handleClick={navToSong}></SongList>
+            <SongList songs={songs} handleClick={navToSong} handleChangeSong={handleChangeSong}></SongList>
           </div>
         </div>
       </section>
