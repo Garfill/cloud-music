@@ -6,7 +6,7 @@ const Btn = styled.span`
   padding: 0 20px;
 `
 const SongList = React.forwardRef((props, ref) => {
-  const { songs, handleClick, handleChangeSong } = props
+  const { songs, handleClick, handleChangeSong, showBtn = true } = props
   const noteRef = useRef(null)
 
   const onClick = (e, item, index) => {
@@ -30,7 +30,10 @@ const SongList = React.forwardRef((props, ref) => {
                   {item.ar[0]?.name} - {item.al?.name}
                 </div>
               </div>
-              <Btn onClick={(e) => onClick(e, item, index)}>播</Btn>
+              {
+                !showBtn ? null :
+                <Btn onClick={(e) => onClick(e, item, index)}>播</Btn>
+              }
             </div>
           )
         })

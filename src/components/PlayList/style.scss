@@ -1,0 +1,23 @@
+.rise-up-enter, .rise-up-appear {
+  .list-wrapper {
+    transform: translateY(100%);
+  }
+}
+
+.rise-up-enter-active, .rise-up-appear-active {
+  .list-wrapper {
+    transition: transform linear .3s;
+    transform: translateY(0);
+  }
+}
+
+.rise-up-exit-active {
+  .list-wrapper {
+    transition: transform linear .3s;
+    transform: translateY(100%);
+  }
+}
+
+.rise-up-exit-done {
+  display: none;
+}

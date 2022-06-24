@@ -41,6 +41,17 @@ export function debounce(fn, delay = 300) {
   }
 }
 
+export function throttle(fn, delay = 300) {
+  let timer = null
+  return function() {
+    if (timer) return;
+    timer = setTimeout(() => {
+      clearTimeout(timer)
+    }, delay);
+    fn.apply(this, arguments)
+  }
+}
+
 export function isEmptyObj(obj) {
   return Object.keys(obj).length === 0
 }

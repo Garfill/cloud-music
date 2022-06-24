@@ -109,7 +109,7 @@ export const CDWrapper = styled.div`
     line-height: 20px;
     white-space: normal;
     text-align: center;
-    color: rgba (255, 255, 255, 0.5);
+    color: rgba(255, 255, 255, 0.5);
   }
 `;
 

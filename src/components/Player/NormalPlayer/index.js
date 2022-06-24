@@ -14,7 +14,7 @@ import './style.scss'
 
 function NormalPlayer(props) {
   const { song, fullScreen, togglePlayer, playing, currentTime, duration } = props;
-  const { clickPlay, onProgressChange } = props;
+  const { clickPlay, onProgressChange, openList, onChangeSong } = props;
 
   const handleClick = (e) => {
     e.stopPropagation();
@@ -78,16 +78,16 @@ function NormalPlayer(props) {
                 <div className="icon i-left" >
                   <i className="iconfont">圈</i>
                 </div>
-                <div className="icon i-left">
+                <div className="icon i-left" onClick={() => onChangeSong(-1)}>
                   <i className="iconfont">上</i>
                 </div>
                 <div className="icon i-center" onClick={handleClick}>
                   <i className="iconfont">播</i>
                 </div>
-                <div className="icon i-right">
+                <div className="icon i-right" onClick={() => onChangeSong(1)}>
                   <i className="iconfont">下</i>
                 </div>
-                <div className="icon i-right">
+                <div className="icon i-right" onClick={openList}>
                   <i className="iconfont">待</i>
                 </div>
               </Operators>
