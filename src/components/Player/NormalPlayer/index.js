@@ -1,5 +1,5 @@
 import ProgressBar from 'components/ProgressBar';
-import React, { memo, useEffect } from 'react'
+import React, { createRef, memo, useEffect, useRef, useState } from 'react'
 import { CSSTransition } from 'react-transition-group';
 import { isEmptyObj } from 'utils';
 import {
@@ -9,12 +9,14 @@ import {
   Bottom,
   Operators,
   CDWrapper,
+  LyricContainer,
 } from "./style";
 import './style.scss'
 
 function NormalPlayer(props) {
   const { song, fullScreen, togglePlayer, playing, currentTime, duration } = props;
   const { clickPlay, onProgressChange, openList, onChangeSong } = props;
+  const { lyric, currentLine } = props;
 
   const handleClick = (e) => {
     e.stopPropagation();
@@ -26,7 +28,19 @@ function NormalPlayer(props) {
     const minute = (time / 60) | 0;
     const second = (time % 60).toString().padStart(2, '0')
     return `${minute}:${second}`
-  }  
+  }
+
+  const currentView = useRef('lyric')
+  const linesRefs = useRef([])
+  const lyricRef = useRef(null)
+
+  useEffect(() => {
+    if (!lyric || !fullScreen) return;
+    let top = linesRefs.current[currentLine].current.offsetTop
+    lyricRef.current.style['transform'] = 'translate(0, ' + -top + 'px)'
+  }, [currentLine, fullScreen])
+  
+
   return (
     <>
       {
@@ -38,7 +52,7 @@ function NormalPlayer(props) {
           mountOnEnter
           unmountOnExit
         >
-          <NormalPlayerContainer>
+          <NormalPlayerContainer className='fullscreen-player'>
             <div className="background">
               <img
                 src={song.al.picUrl + "?param=300x300"}
@@ -55,16 +69,45 @@ function NormalPlayer(props) {
               <h1 className="title">{song.name}</h1>
               <h1 className="subtitle">{song.ar[0]?.name}</h1>
             </Top>
-            <Middle>
-              <CDWrapper className='cd-wrapper'>
-                <div className="cd">
-                  <img
+            <Middle className='middle'>
+              <CSSTransition
+                in={currentView.current == 'cd'}
+                timeout={400}
+                classNames="fade"
+                appear={true}
+              >
+                  <CDWrapper className={'cd-wrapper ' + (currentView.current == 'cd' ? 'visible-view' : 'hidden-view')}>
+                  <div className="cd">
+                    <img
                       className={`image play ${playing ? "" : "pause"}`}
-                    src={song.al.picUrl + "?param=400x400"}
-                    alt=""
-                  />
-                </div>
-              </CDWrapper>
+                      src={song.al.picUrl + "?param=400x400"}
+                      alt=""
+                    />
+                  </div>
+                </CDWrapper>
+              </CSSTransition>
+              <CSSTransition
+                in={currentView.current == 'lyric'}
+                timeout={400}
+                classNames="fade"
+                appear={true}
+              >
+                {
+                  lyric ? 
+                    <LyricContainer ref={lyricRef} className={'lyric-container ' + (currentView.current == 'lyric' ? 'visible-view' : 'hidden-view')}>
+                      {
+                        lyric.lines.map((line, index) => {
+                          let ref = createRef()
+                          linesRefs.current[index] = ref
+                          return (
+                            <div ref={ref} className={`lyric-item ${index == currentLine ? 'active' : ''}`} key={index + '-' + line.time}>{ line.txt }</div>
+                          )
+                        })
+                      }
+                    </LyricContainer>
+                  : <p className="text pure"> 纯音乐，请欣赏。</p>
+                }
+              </CSSTransition>
             </Middle>
             <Bottom className="bottom">
               <div className='progress-bar-box'>

@@ -173,3 +173,15 @@ export const Operators = styled.div`
     color: var(--theme-color);
   }
 `;
+
+export const LyricContainer = styled.div`
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  transform: translate(0, 0);
+  margin-top: -8px;
+  transition: transform .1s linear;
+  font-size: 16px;
+  text-align: center;
+`

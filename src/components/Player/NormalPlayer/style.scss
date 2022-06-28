@@ -53,3 +53,30 @@
     flex: 1 1;
   }
 }
+
+
+.fade-enter, .fade-appear {
+  opacity: 0;
+}
+.fade-enter-active, .fade-appear-active {
+  transition: opacity .4s linear;
+  opacity: 1;
+}
+
+
+.visible-view {
+  visibility: visible;
+}
+.hidden-view {
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.lyric-item {
+  transition: all .05s linear;
+  transform: scale(1);
+  &.active {
+    transform: scale(1.2);
+    color: #fff
+  }
+}

@@ -4,9 +4,10 @@ import { setPlayer } from 'store/player'
 import MiniPlayer from './MiniPlayer'
 import NormalPlayer from './NormalPlayer'
 
-import { getSongUrl } from 'api/song'
+import { getLyric, getSongUrl } from 'api/song'
 import { isEmptyObj, throttle } from 'utils'
 import PlayList from 'components/PlayList'
+import Lyric from 'components/Lyric'
 
 export default function Player(props) {
   const fullScreen = useSelector(state => state.player.fullScreen)
@@ -27,14 +28,13 @@ export default function Player(props) {
     }))
   }
 
-  useEffect(() => {
-    setCurrentTime(0)
-    setDuration(0)
-  }, [])
-
   const clickPlay = (isPlay) => {
     if (isEmptyObj(currentSong)) return;
+    let currentTime = (audioRef.current.currentTime * 1000) | 0
     toggleMusic(isPlay)
+    if (lyricRef.current) {
+      lyricRef.current.togglePlay(currentTime)
+    }
   }
   const toggleMusic = (isPlay) => {
     if (isPlay) {
@@ -56,23 +56,51 @@ export default function Player(props) {
     return playList.findIndex(item => song.id == item.id)
   }
 
+  const lyricRef = useRef(null)
+  const currentLine = useRef(0)
+  const [playingLyric, setPlayingLyric] = useState('')
+  const handleLyric = ({ txt, lineNum }) => {
+    if (!lyricRef.current) return;
+    currentLine.current = lineNum;
+    setPlayingLyric(txt)
+  }
+  const getLyricData = async (id) => {
+    const { lrc: { lyric } } = await getLyric(id)
+    if (!lyric) {
+      lyricRef.current = null
+      return;
+    }
+    lyricRef.current = new Lyric(lyric, handleLyric);
+    lyricRef.current.reset();
+    lyric.current.stop();
+    currentLine.current = 0;
+    return lyric
+  }
+
   useEffect(() => {
-    if (isEmptyObj(currentSong)) return;
+    if (isEmptyObj(currentSong)) {
+      setCurrentTime(0)
+      setDuration(0)
+      return;
+    };
+    // 歌词
+    getLyricData(currentSong.id)
+    // 音源
     clickPlay(false)
     audioRef.current.src = getSongUrl(currentSong.id)
     setCurrentTime(0)
     setDuration((currentSong.dt / 1000) | 0);
-    clickPlay(true)
-    
+    // 设置标识位
     let index = findIndexOfList(currentSong)
     dispatch(setPlayer({
       currentIndex: index
     }))
+
   }, [currentSong])
 
-  const onTimeUpdate = throttle((e) => {
+  const onTimeUpdate = (e) => {
     setCurrentTime(e.target.currentTime)
-  }, 1000)
+  }
 
   const onProgressChange = (per) => {
     const newTime = per * duration;
@@ -83,6 +111,9 @@ export default function Player(props) {
       dispatch(setPlayer({
         playing: true
       }))
+    }
+    if (lyricRef.current) {
+      lyricRef.current.seek(newTime * 1000)
     }
   }
 
@@ -134,6 +165,9 @@ export default function Player(props) {
         onProgressChange={onProgressChange}
         openList={togglePlayList}
         onChangeSong={changeSong}
+        lyric={lyricRef.current}
+        playingLyric={playingLyric}
+        currentLine={currentLine.current}
       ></NormalPlayer>
       <PlayList onBackClick={togglePlayList} playList={playList}></PlayList>
       <audio ref={audioRef} onTimeUpdate={onTimeUpdate}></audio>
